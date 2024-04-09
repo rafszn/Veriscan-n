@@ -41,7 +41,7 @@ app.post('/deepfake',upload.single('file'), async (req, res)=>{
     const predictions = await model.classify({
        imageUrl: dataurl
     })
-  console.log(predictions)
+  // console.log(predictions)
   res.status(200).json(predictions)
 
   } catch (error) {
