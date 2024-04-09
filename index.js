@@ -4,16 +4,14 @@ import TeachableMachine from '@sashido/teachablemachine-node'
 import dotenv from 'dotenv'
 import multer from 'multer'
 import fs from 'fs'
-
-
 dotenv.config()
 
 const app = express()
 const PORT = process.env.PORT || 8880
+
 const model = new TeachableMachine({
   modelUrl: process.env.TMURL
 })
-
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -37,27 +35,18 @@ app.get('/', (req, res)=>{
 app.post('/deepfake',upload.single('file'), async (req, res)=>{
 
   try {
-    
     const image = req.file.path
-    // console.log(image)
     const imageData = fs.readFileSync(image)
-    // console.log(imageData.toString('base64'))
-
     const dataurl = `data:image/jpeg;base64,${imageData.toString('base64')}`
-
     const predictions = await model.classify({
        imageUrl: dataurl
     })
   console.log(predictions)
+  res.status(200).json(predictions)
 
   } catch (error) {
-    console.log(error)
+    res.status(400).json({message: 'Something went wrong'})
   }
-
-
-  
-
-
 })
 
 app.listen(PORT, ()=>{

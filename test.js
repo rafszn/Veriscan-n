@@ -1,11 +1,6 @@
-import express from 'express'
-import cors from 'cors'
 import TeachableMachine from '@sashido/teachablemachine-node'
 import dotenv from 'dotenv'
 dotenv.config()
-
-
-
 
 async function main (){
 
