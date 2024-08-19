@@ -15,7 +15,7 @@ const model = new TeachableMachine({
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-   return cb(null, './public');
+   return cb(null, '/tmp');
   },
   filename: function (req, file, cb) {
     return cb(null, `${Date.now()}_${file.originalname}`);
