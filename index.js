@@ -57,7 +57,7 @@ app.post("/deepfake", upload.single("file"), async (req, res) => {
     res.status(200).json(predictions);
   } catch (error) {
     console.log(error.message);
-    res.status(400).json({ message: "Something went wrong" });
+    res.status(400).json({ message: error.message });
   }
 });
 
