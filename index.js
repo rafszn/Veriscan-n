@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ dest: "./tmp" });
+const upload = multer({ dest: "/tmp/" });
 
 app.use(express.json());
 app.use(cors());
@@ -41,18 +41,22 @@ app.post("/deepfake", upload.single("file"), async (req, res) => {
 
   try {
     const { path } = req.file;
-    const imageData = fs.readFileSync(path);
-    const dataurl = `data:image/jpeg;base64,${imageData.toString("base64")}`;
+    // const imageData = fs.readFileSync(path);
+    // const dataurl = `data:image/jpeg;base64,${imageData.toString("base64")}`;
 
-    const { url } = await cloudinary.uploader.upload(dataurl, {
+    const response = await cloudinary.uploader.upload(path, {
       public_id: "deep",
     });
+
+    const url = response.secure_url;
 
     const predictions = await model.classify({
       imageUrl: url,
     });
+
     res.status(200).json(predictions);
   } catch (error) {
+    console.log(error.message);
     res.status(400).json({ message: "Something went wrong" });
   }
 });
