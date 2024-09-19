@@ -14,15 +14,6 @@ const model = new TeachableMachine({
   modelUrl: process.env.TMURL,
 });
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    return cb(null, "/tmp");
-  },
-  filename: function (req, file, cb) {
-    return cb(null, `${Date.now()}_${file.originalname}`);
-  },
-});
-
 const upload = multer({ dest: "/tmp/" });
 
 app.use(express.json());
@@ -34,15 +25,13 @@ app.get("/", (req, res) => {
 
 app.post("/deepfake", upload.single("file"), async (req, res) => {
   cloudinary.config({
-    cloud_name: "dic7urzye",
-    api_key: "239763643334781",
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD,
     api_secret: process.env.CLOUD_SECRET,
   });
 
   try {
     const { path } = req.file;
-    // const imageData = fs.readFileSync(path);
-    // const dataurl = `data:image/jpeg;base64,${imageData.toString("base64")}`;
 
     const response = await cloudinary.uploader.upload(path, {
       public_id: "deep",
